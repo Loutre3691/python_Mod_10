@@ -7,11 +7,10 @@ def artifact_sorter(artifacts: list[dict]) -> list[dict]:
     return artifacts
 
 def power_filter(mages: list[dict], min_power: int) -> list[dict]:
-    mages = filter(mages, if key=lambda x: x["power"] <= min_power)
-    return mages
+    result = list(filter(lambda x: x["power"] >= min_power, mages))
+    return result
 
-
-# def spell_transformer(spells: list[str]) -> list[str]:
+def spell_transformer(spells: list[str]) -> list[str]:
 
 
 # def mage_stats(mages: list[dict]) -> dict:
@@ -37,8 +36,8 @@ if __name__ == "__main__":
          "power": 92, 
          "element": "Fire"},
          {"name": "Chlogenius", 
-         "element": 5, 
-         "type": "Water"},
+         "power": 5, 
+         "element": "Water"},
          {"name": "paconus", 
          "power": 15, 
          "element": "terre"},
@@ -56,6 +55,7 @@ if __name__ == "__main__":
 
 
     test = artifact_sorter(artifact_list)
-    power_filter(power_filter_list, 10)
+    test2 = power_filter(power_filter_list, 10)
+    print(test2)
     # spell_transformer(spell_list)
     # mage_stats(mage_stats_list)
