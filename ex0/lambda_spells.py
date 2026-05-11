@@ -11,6 +11,8 @@ def power_filter(mages: list[dict], min_power: int) -> list[dict]:
     return result
 
 def spell_transformer(spells: list[str]) -> list[str]:
+    result = list(map(lambda x: "Spells:" + x , spells))
+    return result
 
 
 # def mage_stats(mages: list[dict]) -> dict:
@@ -22,17 +24,17 @@ if __name__ == "__main__":
         {"name": "Fire Staff", 
          "power": 92, 
          "type": "Fire"},
-         {"name": "Aqua Bumb", 
+         {"name": "wand", 
          "power": 24, 
          "type": "Water"},
-         {"name": "Psycho tornado", 
+         {"name": "sword", 
          "power": 98, 
          "type": "psy"},
          
     ]
 
     power_filter_list = [
-         {"name": "Marianis", 
+         {"name": "Marianus", 
          "power": 92, 
          "element": "Fire"},
          {"name": "Chlogenius", 
@@ -45,9 +47,11 @@ if __name__ == "__main__":
 
     ]
 
-    # spell_list = [
-
-    # ]
+    spell_list = [
+        "itchy butt",
+        "paco's dung shot",
+        "gravity fart"
+    ]
 
     # mage_stats_list = [
 
@@ -56,6 +60,6 @@ if __name__ == "__main__":
 
     test = artifact_sorter(artifact_list)
     test2 = power_filter(power_filter_list, 10)
-    print(test2)
-    # spell_transformer(spell_list)
+    test3= spell_transformer(spell_list)
+    print(test3)
     # mage_stats(mage_stats_list)
