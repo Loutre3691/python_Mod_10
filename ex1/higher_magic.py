@@ -22,6 +22,9 @@ def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
 
     return combined
 
+# spell_combiner check that spell1 and spell2 it's a function with callable
+# return tupple
+
 if __name__ == "__main__":
     s = Spells()
 
