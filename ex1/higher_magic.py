@@ -96,7 +96,8 @@ if __name__ == "__main__":
 
     sequence_function = spell_sequence(spell_list)
     results = sequence_function("Dragon")
-    print(results)
+    for result in results:
+        print(result)
 
     
 
