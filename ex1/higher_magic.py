@@ -13,7 +13,7 @@ def is_dragon(target: str, power: int) -> bool:
 
 
 def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
-    print("\n\033[1;34mTesting power combiner...\033[0m")
+    print("\n\033[1;34mTesting spell combiner...\033[0m")
     if not callable(spell1) or not callable(spell2):
         raise TypeError("Both spells must be functions!!")
 
@@ -28,7 +28,7 @@ def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
 
 
 def power_amplifier(base_spell: Callable, multiplier: int) -> Callable:
-    print(f"\n\033[1;34mTesting power {base_spell.__name__}...\033[0m")
+    print(f"\n\033[1;34mTesting power amplifer {base_spell.__name__}...\033[0m")
     if not callable(base_spell):
         raise TypeError("Base spell must be function")
     
@@ -43,7 +43,7 @@ def power_amplifier(base_spell: Callable, multiplier: int) -> Callable:
 def conditional_caster(condition: Callable, spell: Callable) -> Callable:
     print("\n\033[1;34mTesting conditional caster...\033[0m")
     if not callable(spell):
-        raise TypeError("Base spell must be function")
+        raise TypeError("spell must be function")
     
     def condition_caster(target: str, power: int) -> str:
         if condition(target, power):
@@ -58,20 +58,25 @@ def conditional_caster(condition: Callable, spell: Callable) -> Callable:
 
 
 def spell_sequence(spells: list[Callable]) -> Callable:
-    print("\n\033[1;34mTesting spell sequence...\033[0m]")
-    if not callable(spells):
-        raise TypeError("Base spell must be function")
+    print("\n\033[1;34mTesting spell sequence...\033[0m")
+    for spell in spells:
+        if not callable(spell):
+            raise TypeError("spell must be function")
     
-    def sequence(target: str, power: int):
-        spell_list = []
-        spell_list.append(target)
-
-        return spell_list
+    def sequence(target: str, power: Optional[int] = None) -> list:
+        result = []
+        for spell in spells:
+            if power is None:
+                result.append(spell(target))
+            else:
+                result.append(spell(target, power))
+        return result
             
     return sequence
+
 # retourne une fonction qui lance tous les sorts dans l ordre
-#chaque sort recoiemt le meem argument
-#retourn une list de tous les result sort
+# retourn une list de tous les result sort
+
 
 if __name__ == "__main__":
 
@@ -82,23 +87,18 @@ if __name__ == "__main__":
     fireball_amplifer = power_amplifier(fireball, 3)
     print(f"Original: {fireball('Dragon', 5)}")
     print(f"Amplified: {fireball_amplifer('Dragon', 5)}")
-    
-    heal_amplifer = power_amplifier(heals, 3)
-    print(f"Original: {heals('Dragon', 10)}")
-    print(f"Amplified: {heal_amplifer('Dragon', 10)}")
 
     fireball_conditional = conditional_caster(is_dragon, fireball)
     print(f"{fireball_conditional('Dragon', 5)}")
     print(f"{fireball_conditional('Witcher', 60)}")
 
-    spell_list = [
-        fireball,
-        heals
-    ]
-    new_spell_list = spell_sequence()
-    for spell in new_spell_list:
-        print(spell)
+    spell_list = [fireball, heals]
 
+    sequence_function = spell_sequence(spell_list)
+    results = sequence_function("Dragon")
+    print(results)
+
+    
 
 
 
