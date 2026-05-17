@@ -80,7 +80,11 @@ if __name__ == "__main__":
     print("\n\033[1;34mTesting memory vaulr...\033[0m")
     vault = memory_vault()
     vault["store"]("secret", "42")
+    vault["store"]("hero", "WonderWOman")
+
     print(f"store 'secret' = {vault['recall']('secret')}")
     print(f"Recall 'secret': {vault['recall']('secret')}")
+    print(f"store 'hero' = {vault['recall']('hero')}")
+    print(f"Recall 'hero': {vault['recall']('hero')}")
     print(f"Recall 'unknown': {vault['recall']('inconnu')}")
     
