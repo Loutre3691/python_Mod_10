@@ -32,7 +32,8 @@ def enchantment_factory(enchantment_type: str) -> Callable:
 
     return enchant
 
-
+# Returns a dictionary of two functions to store and recall key-value pairs 
+# in an isolated memory dictionary.
 def memory_vault() -> dict[str, Callable]:
     memory = {}
     
@@ -46,10 +47,6 @@ def memory_vault() -> dict[str, Callable]:
     
     return {"store": store, "recall": recall} 
 
-# creation dun system de gestion de memoire:
-# fonction 'store' : prends (key,value) et stock en memoire
-# fonction 'recall' : prend (key) et retourne la valeur socke ou "memory not found)
-# utilie closure pour maintenir le stockage  de memoire prive
 
 if __name__ == "__main__":
     print("\n\033[1;34mTesting mage counter...\033[0m")
@@ -87,4 +84,69 @@ if __name__ == "__main__":
     print(f"store 'hero' = {vault['recall']('hero')}")
     print(f"Recall 'hero': {vault['recall']('hero')}")
     print(f"Recall 'unknown': {vault['recall']('inconnu')}")
-    
+
+
+# =============================================================================
+# SCOPE MYSTERIES — LEXICAL SCOPING ET CLOSURES
+# =============================================================================
+#
+# Le concept central de cet exercice : la CLOSURE
+# Une closure c'est quand une fonction interne se souvient des variables
+# de sa fonction parente, même après que le parent a fini de s'executer.
+# La variable reste "gelée" en mémoire, comme dans un sac à dos.
+#
+# -----------------------------------------------------------------------------
+# mage_counter()
+# -----------------------------------------------------------------------------
+# Crée un compteur indépendant grâce à une closure.
+# count = 0 est gelé dans la fonction interne increment().
+# nonlocal permet de modifier le count du parent (sans ça Python croirait
+# qu'on veut créer un nouveau count local).
+# Chaque appel à mage_counter() crée un nouveau compteur indépendant
+# avec son propre count = 0 en mémoire — counter_a et counter_b
+# ne se mélangent jamais.
+#
+# -----------------------------------------------------------------------------
+# spell_accumulator(initial_power)
+# -----------------------------------------------------------------------------
+# Crée un accumulateur qui part d'une valeur de base et additionne
+# chaque nouvelle valeur au total précédent.
+# power = initial_power est gelé dans la closure.
+# nonlocal permet de modifier ce power à chaque appel.
+# Un seul accumulateur est créé, et on l'appelle plusieurs fois —
+# il se souvient de son état entre chaque appel grâce à la closure.
+#
+# -----------------------------------------------------------------------------
+# enchantment_factory(enchantment_type)
+# -----------------------------------------------------------------------------
+# Une "usine" qui fabrique des fonctions d'enchantement différentes.
+# enchantment_type ("Flaming", "Frozen"...) est gelé dans la closure.
+# La fonction interne enchant() reçoit item_name à l'appel
+# et colle les deux : f"{enchantment_type} {item_name}" → "Flaming Sword".
+# Une seule fonction, mais elle peut créer autant de types
+# d'enchantements différents qu'on veut.
+#
+# -----------------------------------------------------------------------------
+# memory_vault()
+# -----------------------------------------------------------------------------
+# Un coffre-fort privé partagé par deux fonctions via closure.
+# memory = {} est le coffre, gelé et privé — inaccessible de l'extérieur.
+# store(key, value) range une valeur dans le coffre avec une étiquette.
+# recall(key) retrouve la valeur par son étiquette, ou retourne
+# "Memory not found" si la clé n'existe pas.
+# Les deux fonctions sont retournées dans un dict {"store": ..., "recall": ...}
+# C'est une mini base de données privée — la closure garantit
+# que personne ne peut toucher à memory directement.
+#
+# =============================================================================
+# RÉSUMÉ GLOBAL
+# =============================================================================
+# Tous ces exercices partagent le même schéma :
+#   1. La fonction parente crée une variable privée
+#   2. La fonction interne y accède via la closure
+#   3. La fonction parente retourne la fonction interne (son adresse)
+#   4. La variable privée reste en mémoire entre les appels
+#
+# C'est ça le lexical scoping : une fonction se souvient de
+# l'environnement dans lequel elle a été créée.
+# =============================================================================
