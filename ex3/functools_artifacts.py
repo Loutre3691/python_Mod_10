@@ -1,5 +1,5 @@
 
-from functools import reduce, partial
+from functools import reduce, partial, lru_cache
 import operator
 from typing import Callable
 
@@ -46,6 +46,14 @@ def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
 
 
 def memoized_fibonacci(n: int) -> int:
+
+  #  memoized_fibonacci.cache_info()
+
+# utilise functools.lru_cache pour la memorisation
+# imtroduit les calculs de la suite de fibonnacci
+# la fonction doit retourner le nieme nombre fibonnaci
+# le cache devrait ameliorer les performances pour els appels repetes
+# retourne les enieme numbre de fibonacci
 
 
 
