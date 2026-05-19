@@ -52,11 +52,12 @@ def memoized_fibonacci(n: int) -> int:
         return n
     return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
-
+# Uses singledispatch to dynamically route the spell effect 
+# based on the argument's data type (int, str, or list).
 def spell_dispatcher() -> Callable[[Any], str]:
     @singledispatch
     def dispatch(arg) -> str:
-        return f"Unknown type"
+        return f"Unknown spell type"
     
     @dispatch.register(int)
     def _damage_sort(arg) -> str:
@@ -68,19 +69,9 @@ def spell_dispatcher() -> Callable[[Any], str]:
 
     @dispatch.register(list)
     def _multicast(arg) -> str:
-        return f"{len(arg)} spellst"
+        return f"{len(arg)} spells"
     
     return dispatch
-
-
-
-# Créer un système de répartition unique:
-# - utilise le decorateur  functools.singledispatch  pour creer un system de sort
-# - la fonction de base recoit Any et gere le type de sort inconnu
-# - gere different types: int (sort de degat), str(enchentement), list (multicast)
-# - return la fonction de repartition
-# - chaque type devra avoir un comportement de sort approprie
-
 
 
 if __name__ == "__main__":
@@ -113,8 +104,17 @@ if __name__ == "__main__":
     print(f"Fib(15): {memoized_fibonacci(15)}")
 
     print("\n\033[1;34mTesting spell dispatcher...\033[0m")
-    int = spell_dispatcher()
-    print(int)
+    spells = [
+        "spell1",
+        "spell2",
+        "spell3"
+    ]
+    test = spell_dispatcher()
+    print(f"Damage spell: {test(42)}")
+    print(f"Enchantment: {test('fireball')}")
+    print(f"Multi-cast: {test(spells)}")
+    print(test(None))
+
     
 
 
