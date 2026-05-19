@@ -1,7 +1,7 @@
 
-from functools import reduce, partial, lru_cache
+from functools import reduce, partial, lru_cache, singledispatch
 import operator
-from typing import Callable
+from typing import Callable, Any
 
 def fireball(power: int, element: str, target: str) -> str:
     return f"Power: {power}, element: {element}, target: {target}"
@@ -44,17 +44,42 @@ def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
         "elec": electricity
         }
 
-
+# Infinite cache size ensures previously calculated Fibonacci numbers 
+# are never evicted.
+@lru_cache(maxsize = None)
 def memoized_fibonacci(n: int) -> int:
+    if n <= 1:
+        return n
+    return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
-  #  memoized_fibonacci.cache_info()
 
-# utilise functools.lru_cache pour la memorisation
-# imtroduit les calculs de la suite de fibonnacci
-# la fonction doit retourner le nieme nombre fibonnaci
-# le cache devrait ameliorer les performances pour els appels repetes
-# retourne les enieme numbre de fibonacci
+def spell_dispatcher() -> Callable[[Any], str]:
+    @singledispatch
+    def dispatch(arg) -> str:
+        return f"Unknown type"
+    
+    @dispatch.register(int)
+    def _damage_sort(arg) -> str:
+        return f"{arg} damage"
+        
+    @dispatch.register(str)
+    def _enchentment(arg) -> str:
+        return arg
 
+    @dispatch.register(list)
+    def _multicast(arg) -> str:
+        return f"{len(arg)} spellst"
+    
+    return dispatch
+
+
+
+# Créer un système de répartition unique:
+# - utilise le decorateur  functools.singledispatch  pour creer un system de sort
+# - la fonction de base recoit Any et gere le type de sort inconnu
+# - gere different types: int (sort de degat), str(enchentement), list (multicast)
+# - return la fonction de repartition
+# - chaque type devra avoir un comportement de sort approprie
 
 
 
@@ -77,13 +102,20 @@ if __name__ == "__main__":
     enchantment_fire = partial_enchanter(fireball)
     enchantment_ice = partial_enchanter(iceball)
     enchantment_elec = partial_enchanter(lightball)
-
     print(enchantment_fire["fire"](target="Witch"))
     print(enchantment_ice["ice"](target="Dragon"))
     print(enchantment_elec["elec"](target="Trump"))
 
+    print("\n\033[1;34mTesting memoized fibonacci...\033[0m")
+    print(f"Fib(0): {memoized_fibonacci(0)}")
+    print(f"Fib(1): {memoized_fibonacci(1)}")
+    print(f"Fib(10): {memoized_fibonacci(10)}")
+    print(f"Fib(15): {memoized_fibonacci(15)}")
+
+    print("\n\033[1;34mTesting spell dispatcher...\033[0m")
+    int = spell_dispatcher()
+    print(int)
+    
 
 
-
-# def spell_dispatcher() -> Callable[[Any], str]:
 
