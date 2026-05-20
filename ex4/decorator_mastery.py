@@ -56,40 +56,31 @@ def frezzball(power: int) -> str:
         
 
 def retry_spell(max_attempts: int) -> Callable:
-
-    def decorator(func: int) -> Callable:
-
+    def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapper(*args) -> str:
-            if 
-
-            return ""
+        def wrapper(*args, **kwargs) -> str:
+            for attempt in range(1, max_attempts + 1):
+                try:
+                    return func(*args, ** kwargs)
+                except Exception:
+                    print(f"Spell failed, retrying... (attempt {attempt}/{max_attempts})")
+            return f"Spell casting failed after {attempt} attempts"
 
         return wrapper
 
     return decorator
 
 
-@power_validator(min_power=3)
-def fireball() -> str:
-    return "Fireball cast"
-
-@power_validator(min_power=3)
-def frezzball() -> str:
-    return "Frezzball cast"
-
-
-# relancer le decorator:
-# - creer un decorator qui relance les sort qui ont ehcoues
-# - si la fonction leve une exception, reesayer jusqu'a max_attemps fois
-# - print "Spell failed, retrying... (attempt n/max_attempts)"
-# - si tous les tentatives echouent, return "Spell casting failed after max_attempts attempts"
-# - si une tentative reussi, return son resultat normalement
+attempt_count = 0 
+@retry_spell(max_attempts=3)
+def spell(power: int) -> str:
+    global attempt_count
+    attempt_count += 1
+    if attempt_count <= 3:
+        raise ValueError("Spell failed!")
+    return "Waaaaaaagh spelled !"
 
 
-
-
-# class MageGuild:
 # @staticmethod
 # def validate_mage_name(name: str) -> bool:
 # def cast_spell(self, spell_name: str, power: int) -> str:
@@ -104,7 +95,12 @@ if __name__ == "__main__":
     print(f"test with power 60: {frezzball(60)}")
 
     print("\n\033[1;34mTesting retrying spell...\033[0m")
-    retry_spell()
+    print(spell(5))
+    print(spell(5))
+
+
+
+   
 
 
     # print("\n\033[1;34mTesting MageGuild...\033[0m")
