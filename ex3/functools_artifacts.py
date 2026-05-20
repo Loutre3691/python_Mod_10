@@ -3,16 +3,21 @@ from functools import reduce, partial, lru_cache, singledispatch
 import operator
 from typing import Callable, Any
 
+
 def fireball(power: int, element: str, target: str) -> str:
     return f"Power: {power}, element: {element}, target: {target}"
+
 
 def iceball(power: int, element: str, target: str) -> str:
     return f"Power: {power}, element: {element}, target: {target}"
 
+
 def lightball(power: int, element: str, target: str) -> str:
     return f"Power: {power}, element: {element}, target: {target}"
 
-#  Returns a single final value after processing all elements, depending on the operation.
+
+#  Returns a single final value after processing all elements,
+# depending on the operation.
 def spell_reducer(spells: list[int], operation: str) -> int:
     operations = {
         "add": operator.add,
@@ -23,18 +28,17 @@ def spell_reducer(spells: list[int], operation: str) -> int:
     if not spells:
         return 0
     if operation not in operations:
-        raise ValueError("Operation unknow") 
-    
+        raise ValueError("Operation unknow")
+
     funct = operations[operation]
-    result = reduce(funct, spells) # type: ignore
-  
+    result = reduce(funct, spells)  # type: ignore
     return result
 
 
 def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
     if not callable(base_enchantment):
-        raise TypeError ("base_enchantment must be function")
-  
+        raise TypeError("base_enchantment must be function")
+
     fire = partial(base_enchantment, power=50, element="fire")
     freeze = partial(base_enchantment, power=50, element="ice")
     electricity = partial(base_enchantment, power=50, element="elec")
@@ -44,25 +48,27 @@ def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
         "elec": electricity
         }
 
-# Infinite cache size ensures previously calculated Fibonacci numbers 
+
+# Infinite cache size ensures previously calculated Fibonacci numbers
 # are never evicted.
-@lru_cache(maxsize = None)
+@lru_cache(maxsize=None)
 def memoized_fibonacci(n: int) -> int:
     if n <= 1:
         return n
     return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
-# Uses singledispatch to dynamically route the spell effect 
+
+# Uses singledispatch to dynamically route the spell effect
 # based on the argument's data type (int, str, or list).
 def spell_dispatcher() -> Callable[[Any], str]:
     @singledispatch
     def dispatch(arg) -> str:
-        return f"Unknown spell type"
-    
+        return "Unknown spell type"
+
     @dispatch.register(int)
     def _damage_sort(arg) -> str:
         return f"{arg} damage"
-        
+
     @dispatch.register(str)
     def _enchentment(arg) -> str:
         return arg
@@ -70,7 +76,7 @@ def spell_dispatcher() -> Callable[[Any], str]:
     @dispatch.register(list)
     def _multicast(arg) -> str:
         return f"{len(arg)} spells"
-    
+
     return dispatch
 
 
@@ -114,8 +120,3 @@ if __name__ == "__main__":
     print(f"Enchantment: {test('fireball')}")
     print(f"Multi-cast: {test(spells)}")
     print(test(None))
-
-    
-
-
-
