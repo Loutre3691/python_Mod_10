@@ -80,6 +80,20 @@ def spell(power: int) -> str:
         raise ValueError("Spell failed!")
     return "Waaaaaaagh spelled !"
 
+
+
+def power_validator(min_power: int):
+    def decorator(func):  
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            power = kwargs.get('power', args[2] if len(args) > 2 else 0)
+            if power < min_power:
+                    return "Insufficient power for this spell"
+            return func(*args, kwargs)
+        return wrapper
+    return decorator   
+
 class MagiGuild():
 
     @staticmethod
@@ -93,11 +107,9 @@ class MagiGuild():
         return True
 
 
+    @power_validator(min_power=10)
     def cast_spell(self, spell_name: str, power: int) -> str:
-    # methode d'instance
-    # devra uutiliser le  decoreator "power_vaidator " avec min_power=10
-    # quand le power est valide, retourne  "Successfully cast spell_name with <power> power"
-    # autrement return  "Insufficient power for this spell"
+        return f"Successfully cast {spell_name} with {power} power"
 
 
 if __name__ == "__main__":
@@ -118,5 +130,14 @@ if __name__ == "__main__":
     print(result_valid)
     result_false = MagiGuild.validate_mage_name("Paco_la_frite")
     print(result_false)
+
+    guild = MagiGuild()
+    print(guild.cast_spell("POOPBALL", 55))
+    print(guild.cast_spell("POOPBALL", 5))
+    
+
+
+
+
 
 
