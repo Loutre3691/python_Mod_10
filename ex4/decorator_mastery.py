@@ -90,7 +90,7 @@ def power_validator(min_power: int):
             power = kwargs.get('power', args[2] if len(args) > 2 else 0)
             if power < min_power:
                     return "Insufficient power for this spell"
-            return func(*args, kwargs)
+            return func(*args, **kwargs)
         return wrapper
     return decorator   
 
