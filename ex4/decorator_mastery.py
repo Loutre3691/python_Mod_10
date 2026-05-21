@@ -80,13 +80,28 @@ def spell(power: int) -> str:
         raise ValueError("Spell failed!")
     return "Waaaaaaagh spelled !"
 
+class MagiGuild():
 
-# @staticmethod
-# def validate_mage_name(name: str) -> bool:
-# def cast_spell(self, spell_name: str, power: int) -> str:
+    @staticmethod
+    def validate_mage_name(name: str) -> bool:
+        if not isinstance(name, str):
+            return False
+        if len(name) < 3:
+            return False
+        if not all(char.isalpha() or char.isspace() for char in name):
+            return False
+        return True
+
+
+    def cast_spell(self, spell_name: str, power: int) -> str:
+    # methode d'instance
+    # devra uutiliser le  decoreator "power_vaidator " avec min_power=10
+    # quand le power est valide, retourne  "Successfully cast spell_name with <power> power"
+    # autrement return  "Insufficient power for this spell"
 
 
 if __name__ == "__main__":
+
     print("\n\033[1;34mTesting spell timer...\033[0m")
     print(fireball(0.1))
 
@@ -98,9 +113,10 @@ if __name__ == "__main__":
     print(spell(5))
     print(spell(5))
 
+    print("\n\033[1;34mTesting MageGuild...\033[0m")
+    result_valid = MagiGuild.validate_mage_name("Paco la frite")
+    print(result_valid)
+    result_false = MagiGuild.validate_mage_name("Paco_la_frite")
+    print(result_false)
 
 
-   
-
-
-    # print("\n\033[1;34mTesting MageGuild...\033[0m")
