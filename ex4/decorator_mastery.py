@@ -23,27 +23,33 @@ def spell_timer(func: Callable) -> Callable:
     return wrapper
 
 
-# Apply the decorator: fireball is now automatically timed whenever it 
+# Apply the decorator: fireball is now automatically timed whenever it
 # is called
 @spell_timer
 def fireball(duration: int) -> str:
     time.sleep(duration)
-    return "Result: Fireball cast!"
+    return "Result: Fireball cast! 🔥"
 
 
-# p1. THE FACTORY: It accepts the custom arguments for the decorator (e.g., min_power)
+# p1. THE FACTORY: It accepts the custom arguments for the decorator
+#  (e.g., min_power)
 def power_validator(min_power: int) -> Callable:
-    # 2. THE DECORATOR: This is created by the factory and receives the function to modify
+    # 2. THE DECORATOR: This is created by the factory and receives the
+    # function to modify
     def decorator(func: Callable) -> Callable:
-        # @wraps preserves the original function's name and documentation (metadata)
+        # @wraps preserves the original function's name and documentation
+        # (metadata)
         @wraps(func)
-        # 3. THE WRAPPER: This is the actual container that replaces the original function
-        def wrapper(*args) -> str:
-            # Extract the first argument passed to the function (the spell's power)
-            power = args[0]
-            if power >= min_power:
-                return func(*args)
-            return "Insufficient power for this spell"
+        # 3. THE WRAPPER: This is the actual container that replaces the
+        # original function
+        def wrapper(*args, **kwargs) -> str:
+            # Extract the first argument passed to the function
+            power = kwargs.get('power') \
+                    or (args[2] if len(args) > 2 else None) \
+                    or (args[0] if args else 0)
+            if power < min_power:
+                return "Insufficient power for this spell"
+            return func(*args, **kwargs)
 
         return wrapper
 
@@ -52,8 +58,8 @@ def power_validator(min_power: int) -> Callable:
 
 @power_validator(min_power=50)
 def frezzball(power: int) -> str:
-    return "Frezzball cast"
-        
+    return "Frezzball cast ! ❄️"
+
 
 def retry_spell(max_attempts: int) -> Callable:
     def decorator(func: Callable) -> Callable:
@@ -63,7 +69,8 @@ def retry_spell(max_attempts: int) -> Callable:
                 try:
                     return func(*args, ** kwargs)
                 except Exception:
-                    print(f"Spell failed, retrying... (attempt {attempt}/{max_attempts})")
+                    print(f"Spell failed, retrying... "
+                          f"(attempt {attempt}/{max_attempts})")
             return f"Spell casting failed after {attempt} attempts"
 
         return wrapper
@@ -71,7 +78,9 @@ def retry_spell(max_attempts: int) -> Callable:
     return decorator
 
 
-attempt_count = 0 
+attempt_count = 0
+
+
 @retry_spell(max_attempts=3)
 def spell(power: int) -> str:
     global attempt_count
@@ -81,21 +90,7 @@ def spell(power: int) -> str:
     return "Waaaaaaagh spelled !"
 
 
-
-def power_validator(min_power: int):
-    def decorator(func):  
-
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            power = kwargs.get('power', args[2] if len(args) > 2 else 0)
-            if power < min_power:
-                    return "Insufficient power for this spell"
-            return func(*args, **kwargs)
-        return wrapper
-    return decorator   
-
 class MagiGuild():
-
     @staticmethod
     def validate_mage_name(name: str) -> bool:
         if not isinstance(name, str):
@@ -105,7 +100,6 @@ class MagiGuild():
         if not all(char.isalpha() or char.isspace() for char in name):
             return False
         return True
-
 
     @power_validator(min_power=10)
     def cast_spell(self, spell_name: str, power: int) -> str:
@@ -132,12 +126,5 @@ if __name__ == "__main__":
     print(result_false)
 
     guild = MagiGuild()
-    print(guild.cast_spell("POOPBALL", 55))
-    print(guild.cast_spell("POOPBALL", 5))
-    
-
-
-
-
-
-
+    print(guild.cast_spell("POOPBALL 💩", power=55))
+    print(guild.cast_spell("POOPBALL 💩", power=5))

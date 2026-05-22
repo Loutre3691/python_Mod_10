@@ -83,6 +83,6 @@ if __name__ == "__main__":
 
     print(f"store 'secret' = {vault['recall']('secret')}")
     print(f"Recall 'secret': {vault['recall']('secret')}")
-    print(f"store 'hero' = {vault['recall']('hero')}")
+    print(f"Store 'hero' = {vault['recall']('hero')}")
     print(f"Recall 'hero': {vault['recall']('hero')}")
     print(f"Recall 'unknown': {vault['recall']('inconnu')}")

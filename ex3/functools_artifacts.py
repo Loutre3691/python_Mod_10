@@ -95,13 +95,13 @@ if __name__ == "__main__":
     value = spell_reducer(spells_list, "max")
     print(f"Max: {value}\n")
 
-    print("\n\033[1;34mTesting spell partial...\033[0m")
+    print("\033[1;34mTesting spell partial...\033[0m")
     enchantment_fire = partial_enchanter(fireball)
     enchantment_ice = partial_enchanter(iceball)
     enchantment_elec = partial_enchanter(lightball)
-    print(enchantment_fire["fire"](target="Witch"))
-    print(enchantment_ice["ice"](target="Dragon"))
-    print(enchantment_elec["elec"](target="Trump"))
+    print(enchantment_fire["fire"](target="Witch 🧙"))
+    print(enchantment_ice["ice"](target="Dragon 🐉"))
+    print(enchantment_elec["elec"](target="Trump 🥕"))
 
     print("\n\033[1;34mTesting memoized fibonacci...\033[0m")
     print(f"Fib(0): {memoized_fibonacci(0)}")
@@ -117,6 +117,6 @@ if __name__ == "__main__":
     ]
     test = spell_dispatcher()
     print(f"Damage spell: {test(42)}")
-    print(f"Enchantment: {test('fireball')}")
+    print(f"Enchantment: {test('fireball')} 🔥")
     print(f"Multi-cast: {test(spells)}")
     print(test(None))
